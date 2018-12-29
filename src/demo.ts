@@ -15,11 +15,23 @@
  * limitations under the License.
  */
 
-'use strict';
-
-/* eslint-env es6 */
+type Settings = {
+    viewAngle: number,
+    near: number,
+    far: number,
+};
 
 class Demo {
+  _width: number | null = null;
+  _height: number | null = null;
+  _renderer: THREE.WebGLRenderer | null = null;
+  _camera: THREE.PerspectiveCamera | null = null;
+  _aspect: number | null = null;
+  _settings : Settings | null = null;
+  _box1: THREE.Mesh | null = null;
+  _box2: THREE.Mesh | null = null;
+  _container: Element | null = null;
+  _scene: THREE.Scene | null = null;
 
   static get CAMERA_SETTINGS () {
     return {
@@ -30,14 +42,6 @@ class Demo {
   }
 
   constructor () {
-    this._width;
-    this._height;
-    this._renderer;
-    this._camera;
-    this._aspect;
-    this._settings;
-    this._box1;
-    this._box2;
     this._container = document.querySelector('#container');
 
     this.clearContainer();
@@ -59,17 +63,17 @@ class Demo {
     const ROTATION_VALUE = 4;
     const time = window.performance.now() * 0.0001;
 
-    this._box1.rotation.x = Math.sin(time) * ROTATION_VALUE;
-    this._box1.rotation.y = Math.cos(time) * ROTATION_VALUE;
+    this._box1!.rotation.x = Math.sin(time) * ROTATION_VALUE;
+    this._box1!.rotation.y = Math.cos(time) * ROTATION_VALUE;
 
-    this._box2.rotation.x = Math.sin(time) * ROTATION_VALUE;
-    this._box2.rotation.y = Math.cos(time) * ROTATION_VALUE;
+    this._box2!.rotation.x = Math.sin(time) * ROTATION_VALUE;
+    this._box2!.rotation.y = Math.cos(time) * ROTATION_VALUE;
 
     this._render();
   }
 
   _render () {
-    this._renderer.render(this._scene, this._camera);
+    this._renderer!.render(this._scene!, this._camera!);
     requestAnimationFrame(this._update);
   }
 
@@ -78,15 +82,15 @@ class Demo {
     this._height = window.innerHeight;
     this._aspect = this._width / this._height;
 
-    this._renderer.setPixelRatio(window.devicePixelRatio);
-    this._renderer.setSize(this._width, this._height);
+    this._renderer!.setPixelRatio(window.devicePixelRatio);
+    this._renderer!.setSize(this._width, this._height);
 
     if (!this._camera) {
       return;
     }
 
-    this._camera.aspect = this._aspect;
-    this._camera.updateProjectionMatrix();
+    this._camera!.aspect = this._aspect;
+    this._camera!.updateProjectionMatrix();
   }
 
   _addEventListeners () {
@@ -94,19 +98,19 @@ class Demo {
   }
 
   clearContainer () {
-    this._container.innerHTML = '';
+    this._container!.innerHTML = '';
   }
 
   createRenderer () {
     this._renderer = new THREE.WebGLRenderer();
-    this._container.appendChild(this._renderer.domElement);
+    this._container!.appendChild(this._renderer.domElement);
   }
 
   createCamera () {
     this._settings = Demo.CAMERA_SETTINGS;
     this._camera = new THREE.PerspectiveCamera(
         this._settings.viewAngle,
-        this._aspect,
+        this._aspect!,
         this._settings.near,
         this._settings.far
     );
@@ -146,8 +150,8 @@ class Demo {
 
     room.position.z = -5;
 
-    this._scene.add(this._box1);
-    this._scene.add(this._box2);
-    this._scene.add(room);
+    this._scene!.add(this._box1);
+    this._scene!.add(this._box2);
+    this._scene!.add(room);
   }
 }

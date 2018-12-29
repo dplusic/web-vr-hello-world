@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Web VR Demo",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -14,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/dplusic/web-vr-hello-world/issues"
   },
-  "homepage": "https://github.com/dplusic/web-vr-hello-world#readme"
+  "homepage": "https://github.com/dplusic/web-vr-hello-world#readme",
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "@types/three": "^0.93.14",
+    "typescript": "^3.2.2"
+  }
 }
