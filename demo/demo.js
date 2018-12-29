@@ -36,7 +36,8 @@ class Demo {
     this._camera;
     this._aspect;
     this._settings;
-    this._box;
+    this._box1;
+    this._box2;
     this._container = document.querySelector('#container');
 
     this.clearContainer();
@@ -58,8 +59,11 @@ class Demo {
     const ROTATION_VALUE = 4;
     const time = window.performance.now() * 0.0001;
 
-    this._box.rotation.x = Math.sin(time) * ROTATION_VALUE;
-    this._box.rotation.y = Math.cos(time) * ROTATION_VALUE;
+    this._box1.rotation.x = Math.sin(time) * ROTATION_VALUE;
+    this._box1.rotation.y = Math.cos(time) * ROTATION_VALUE;
+
+    this._box2.rotation.x = Math.sin(time) * ROTATION_VALUE;
+    this._box2.rotation.y = Math.cos(time) * ROTATION_VALUE;
 
     this._render();
   }
@@ -112,19 +116,25 @@ class Demo {
   }
 
   createMeshes () {
-    const WIDTH = 1;
-    const HEIGHT = 1;
-    const DEPTH = 1;
 
-    // Box.
-    const boxGeometry = new THREE.BoxGeometry(WIDTH, HEIGHT, DEPTH);
-    const boxMaterial = new THREE.MeshNormalMaterial();
+    // Box1
+    this._box1 = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshNormalMaterial());
+    this._box1.position.x = -1;
+    this._box1.position.y = 0;
+    this._box1.position.z = -5;
 
-    this._box = new THREE.Mesh(boxGeometry, boxMaterial);
-    this._box.position.z = -5;
+    // Box2
+    this._box2 = new THREE.Mesh(
+      new THREE.BoxGeometry(3, 3, 3),
+      new THREE.MeshNormalMaterial());
+    this._box2.position.x = 3;
+    this._box2.position.y = 0;
+    this._box2.position.z = -15;
 
     // Room.
-    const roomGeometry = new THREE.BoxGeometry(10, 2, 10, 10, 2, 10);
+    const roomGeometry = new THREE.BoxGeometry(10, 5, 25, 10, 5, 25);
     const roomMaterial = new THREE.MeshBasicMaterial({
       wireframe: true,
       opacity: 0.3,
@@ -135,7 +145,8 @@ class Demo {
 
     room.position.z = -5;
 
-    this._scene.add(this._box);
+    this._scene.add(this._box1);
+    this._scene.add(this._box2);
     this._scene.add(room);
   }
 }
