@@ -15,13 +15,15 @@
  * limitations under the License.
  */
 
+import * as THREE from 'three';
+
 type Settings = {
     viewAngle: number,
     near: number,
     far: number,
 };
 
-class Demo {
+export class Demo {
   _width: number | null = null;
   _height: number | null = null;
   _renderer: THREE.WebGLRenderer | null = null;

@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+import { Demo } from './demo';
+
 class DemoVR extends Demo {
   _disabled: boolean;
   _firstVRFrame?: boolean;
