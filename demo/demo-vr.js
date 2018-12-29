@@ -61,6 +61,7 @@ class DemoVR extends Demo {
       // If there are no devices available, quit out.
       if (displays.length === 0) {
         console.warn('No devices available able to present.');
+        this._createManualButton();
         return;
       }
 
@@ -80,6 +81,17 @@ class DemoVR extends Demo {
 
   _showWebVRNotSupportedError () {
     console.error('WebVR not supported');
+    this._createManualButton();
+  }
+
+  _createManualButton () {
+    this._button = document.createElement('button');
+    this._button.classList.add('user-manual');
+    this._button.textContent = 'Web VR Manual';
+    this._button.addEventListener('click', _ => {
+      window.location = 'https://dplusic.github.io/web-vr-user-manual/';
+    });
+    document.body.appendChild(this._button);
   }
 
   _createPresentationButton () {
