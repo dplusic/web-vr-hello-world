@@ -16,6 +16,7 @@
  */
 
 import * as THREE from 'three';
+import * as THREE_TEXT2D from 'three-text2d'
 
 type Settings = {
     viewAngle: number,
@@ -56,6 +57,7 @@ export class Demo {
     this.createCamera();
     this.createScene();
     this.createMeshes();
+    this.createTexts();
 
     this._addEventListeners();
     requestAnimationFrame(this._update);
@@ -155,5 +157,19 @@ export class Demo {
     this._scene!.add(this._box1);
     this._scene!.add(this._box2);
     this._scene!.add(room);
+  }
+
+  createTexts () {
+
+    const text1 = new THREE_TEXT2D.SpriteText2D(
+      "Which one is farther away?",
+       { align: THREE_TEXT2D.textAlign.center,  font: '100px Arial', fillStyle: '#FFFFFF', antialias: false })
+    text1.position.x = 0;
+    text1.position.y = -1;
+    text1.position.z = -4;
+    text1.scale.x = 0.002;
+    text1.scale.y = 0.002;
+
+    this._scene!.add(text1)
   }
 }
