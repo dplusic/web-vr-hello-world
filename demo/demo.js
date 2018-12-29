@@ -78,6 +78,7 @@ class Demo {
     this._height = window.innerHeight;
     this._aspect = this._width / this._height;
 
+    this._renderer.setPixelRatio(window.devicePixelRatio);
     this._renderer.setSize(this._width, this._height);
 
     if (!this._camera) {
