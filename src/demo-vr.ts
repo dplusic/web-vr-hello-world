@@ -15,143 +15,144 @@
  * limitations under the License.
  */
 
-import { Demo } from './demo';
+import { Demo } from './demo'
 
 class DemoVR extends Demo {
-  _disabled: boolean;
-  _firstVRFrame?: boolean;
-  _button?: HTMLButtonElement;
+  _disabled: boolean
+  _firstVRFrame?: boolean
+  _button?: HTMLButtonElement
   _vr?: {
-      display: VRDisplay | null,
-      frameData: VRFrameData,
+    display: VRDisplay | null
+    frameData: VRFrameData
   }
 
-  constructor () {
-    super();
+  constructor() {
+    super()
 
-    this._onResize = this._onResize.bind(this);
+    this._onResize = this._onResize.bind(this)
 
-    this._disabled = false;
+    this._disabled = false
     if (typeof VRFrameData === 'undefined') {
-      this._disabled = true;
-      this._showWebVRNotSupportedError();
-      return;
+      this._disabled = true
+      this._showWebVRNotSupportedError()
+      return
     }
 
-    this._firstVRFrame = false;
-    this._button = undefined;
+    this._firstVRFrame = false
+    this._button = undefined
     this._vr = {
       display: null,
-      frameData: new VRFrameData()
-    };
+      frameData: new VRFrameData(),
+    }
 
-    this._addVREventListeners();
-    this._getDisplays();
+    this._addVREventListeners()
+    this._getDisplays()
   }
 
-  _addVREventListeners () {
+  _addVREventListeners() {
     window.addEventListener('vrdisplayactivate', _ => {
-      this._activateVR();
-    });
+      this._activateVR()
+    })
 
     window.addEventListener('vrdisplaydeactivate', _ => {
-      this._deactivateVR();
-    });
+      this._deactivateVR()
+    })
   }
 
-  _getDisplays () {
+  _getDisplays() {
     return navigator.getVRDisplays().then(displays => {
       // Filter down to devices that can present.
-      displays = displays.filter(display => display.capabilities.canPresent);
+      displays = displays.filter(display => display.capabilities.canPresent)
 
       // If there are no devices available, quit out.
       if (displays.length === 0) {
-        console.warn('No devices available able to present.');
-        this._createManualButton();
-        return;
+        console.warn('No devices available able to present.')
+        this._createManualButton()
+        return
       }
 
       // Store the first display we find. A more production-ready version should
       // allow the user to choose from their available displays.
-      this._vr!.display = displays[0];
-      this._vr!.display!.depthNear = DemoVR.CAMERA_SETTINGS.near;
-      this._vr!.display!.depthFar = DemoVR.CAMERA_SETTINGS.far;
+      this._vr!.display = displays[0]
+      this._vr!.display!.depthNear = DemoVR.CAMERA_SETTINGS.near
+      this._vr!.display!.depthFar = DemoVR.CAMERA_SETTINGS.far
 
-      this._createPresentationButton();
-    });
+      this._createPresentationButton()
+    })
   }
 
-  _showNoPresentError () {
-    console.error(`Unable to present with this device ${this._vr!.display}`);
+  _showNoPresentError() {
+    console.error(`Unable to present with this device ${this._vr!.display}`)
   }
 
-  _showWebVRNotSupportedError () {
-    console.error('WebVR not supported');
-    this._createManualButton();
+  _showWebVRNotSupportedError() {
+    console.error('WebVR not supported')
+    this._createManualButton()
   }
 
-  _createManualButton () {
-    this._button = document.createElement('button');
-    this._button.classList.add('user-manual');
-    this._button.textContent = 'Web VR Manual';
+  _createManualButton() {
+    this._button = document.createElement('button')
+    this._button.classList.add('user-manual')
+    this._button.textContent = 'Web VR Manual'
     this._button.addEventListener('click', _ => {
-      window.location.href = 'https://dplusic.github.io/web-vr-user-manual/';
-    });
-    document.body.appendChild(this._button);
+      window.location.href = 'https://dplusic.github.io/web-vr-user-manual/'
+    })
+    document.body.appendChild(this._button)
   }
 
-  _createPresentationButton () {
-    this._button = document.createElement('button');
-    this._button.classList.add('vr-toggle');
-    this._button.textContent = 'Enable VR';
+  _createPresentationButton() {
+    this._button = document.createElement('button')
+    this._button.classList.add('vr-toggle')
+    this._button.textContent = 'Enable VR'
     this._button.addEventListener('click', _ => {
-      this._toggleVR();
-    });
-    document.body.appendChild(this._button);
+      this._toggleVR()
+    })
+    document.body.appendChild(this._button)
   }
 
-  _deactivateVR () {
+  _deactivateVR() {
     if (!this._vr!.display) {
-      return;
+      return
     }
 
     if (!this._vr!.display!.isPresenting) {
-      return;
+      return
     }
 
-    this._vr!.display!.exitPresent();
-    return;
+    this._vr!.display!.exitPresent()
+    return
   }
 
-  _activateVR () {
+  _activateVR() {
     if (!this._vr!.display) {
-      return;
+      return
     }
 
-    this._vr!.display!.requestPresent([{
-      source: this._renderer!.domElement
-    }])
-    .catch(e => {
-      console.error(`Unable to init VR: ${e}`);
-    });
+    this._vr!.display!.requestPresent([
+      {
+        source: this._renderer!.domElement,
+      },
+    ]).catch(e => {
+      console.error(`Unable to init VR: ${e}`)
+    })
   }
 
-  _toggleVR () {
+  _toggleVR() {
     if (this._vr!.display!.isPresenting) {
-      return this._deactivateVR();
+      return this._deactivateVR()
     }
 
-    return this._activateVR();
+    return this._activateVR()
   }
 
-  _render () {
+  _render() {
     if (this._disabled || !(this._vr!.display && this._vr!.display!.isPresenting)) {
       // Ensure that we switch everything back to auto for non-VR mode.
-      this._onResize();
-      this._renderer!.autoClear = true;
-      this._scene!.matrixAutoUpdate = true;
+      this._onResize()
+      this._renderer!.autoClear = true
+      this._scene!.matrixAutoUpdate = true
 
-      return super._render();
+      return super._render()
     }
 
     // When this is called the first time, it will be using the standard
@@ -159,72 +160,75 @@ class DemoVR extends Demo {
     // display.submitFrame. So for the first frame that this is called we will
     // exit early and request a new frame from the VR device instead.
     if (this._firstVRFrame) {
-      this._firstVRFrame = false;
-      return this._vr!.display!.requestAnimationFrame(this._update);
+      this._firstVRFrame = false
+      return this._vr!.display!.requestAnimationFrame(this._update)
     }
 
-    const EYE_WIDTH = this._width! * 0.5;
-    const EYE_HEIGHT = this._height!;
+    const EYE_WIDTH = this._width! * 0.5
+    const EYE_HEIGHT = this._height!
 
     // Get all the latest data from the VR headset and dump it into frameData.
-    this._vr!.display!.getFrameData(this._vr!.frameData);
+    this._vr!.display!.getFrameData(this._vr!.frameData)
 
     // Disable autoupdating because these values will be coming from the
     // frameData data directly.
-    this._scene!.matrixAutoUpdate = false;
+    this._scene!.matrixAutoUpdate = false
 
     // Make sure not to clear the renderer automatically, because we will need
     // to render it ourselves twice, once for each eye.
-    this._renderer!.autoClear = false;
+    this._renderer!.autoClear = false
 
     // Clear the canvas manually.
-    this._renderer!.clear();
+    this._renderer!.clear()
 
     // Left eye.
-    this._renderEye(
-      this._vr!.frameData.leftViewMatrix,
-      this._vr!.frameData.leftProjectionMatrix,
-      {
-        x: 0,
-        y: 0,
-        w: EYE_WIDTH,
-        h: EYE_HEIGHT
-      });
+    this._renderEye(this._vr!.frameData.leftViewMatrix, this._vr!.frameData.leftProjectionMatrix, {
+      x: 0,
+      y: 0,
+      w: EYE_WIDTH,
+      h: EYE_HEIGHT,
+    })
 
     // Ensure that left eye calcs aren't going to interfere with right eye ones.
-    this._renderer!.clearDepth();
+    this._renderer!.clearDepth()
 
     // Right eye.
     this._renderEye(
       this._vr!.frameData.rightViewMatrix,
-      this._vr!.frameData.rightProjectionMatrix, {
+      this._vr!.frameData.rightProjectionMatrix,
+      {
         x: EYE_WIDTH,
         y: 0,
         w: EYE_WIDTH,
-        h: EYE_HEIGHT
-      });
+        h: EYE_HEIGHT,
+      },
+    )
 
     // Use the VR display's in-built rAF (which can be a diff refresh rate to
     // the default browser one).
-    this._vr!.display!.requestAnimationFrame(this._update);
+    this._vr!.display!.requestAnimationFrame(this._update)
 
     // Call submitFrame to ensure that the device renders the latest image from
     // the WebGL context.
-    this._vr!.display!.submitFrame();
+    this._vr!.display!.submitFrame()
   }
 
-  _renderEye (viewMatrix: Float32Array, projectionMatrix: Float32Array, viewport: { x: number, y: number, w: number, h: number }) {
+  _renderEye(
+    viewMatrix: Float32Array,
+    projectionMatrix: Float32Array,
+    viewport: { x: number; y: number; w: number; h: number },
+  ) {
     // Set the left or right eye half.
-    this._renderer!.setViewport(viewport.x, viewport.y, viewport.w, viewport.h);
+    this._renderer!.setViewport(viewport.x, viewport.y, viewport.w, viewport.h)
 
     // Update the scene and camera matrices.
-    this._camera!.projectionMatrix.fromArray(projectionMatrix as unknown as number[]);
-    this._scene!.matrix.fromArray(viewMatrix as unknown as number[]);
+    this._camera!.projectionMatrix.fromArray((projectionMatrix as unknown) as number[])
+    this._scene!.matrix.fromArray((viewMatrix as unknown) as number[])
 
     // Tell the scene to update (otherwise it will ignore the change of matrix).
-    this._scene!.updateMatrixWorld(true);
-    this._renderer!.render(this._scene!, this._camera!);
+    this._scene!.updateMatrixWorld(true)
+    this._renderer!.render(this._scene!, this._camera!)
   }
 }
 
-new DemoVR();
+new DemoVR()
