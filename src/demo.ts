@@ -93,8 +93,8 @@ export class Demo {
       return
     }
 
-    this._camera!.aspect = this._aspect
-    this._camera!.updateProjectionMatrix()
+    this._camera.aspect = this._aspect
+    this._camera.updateProjectionMatrix()
   }
 
   _addEventListeners() {

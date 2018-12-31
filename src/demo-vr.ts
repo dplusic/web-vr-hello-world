@@ -32,6 +32,7 @@ class DemoVR extends Demo {
     this._onResize = this._onResize.bind(this)
 
     this._disabled = false
+    /* tslint:disable-next-line:strict-type-predicates */
     if (typeof VRFrameData === 'undefined') {
       this._disabled = true
       this._showWebVRNotSupportedError()
@@ -46,7 +47,7 @@ class DemoVR extends Demo {
     }
 
     this._addVREventListeners()
-    this._getDisplays()
+    this._getDisplays() // tslint:disable-line:no-floating-promises
   }
 
   _addVREventListeners() {
@@ -119,7 +120,7 @@ class DemoVR extends Demo {
       return
     }
 
-    this._vr!.display!.exitPresent()
+    this._vr!.display!.exitPresent() // tslint:disable-line:no-floating-promises
     return
   }
 
@@ -231,4 +232,4 @@ class DemoVR extends Demo {
   }
 }
 
-new DemoVR()
+new DemoVR() // tslint:disable-line:no-unused-expression
